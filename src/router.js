@@ -4,6 +4,7 @@ import Login from './components/Login';
 import Panelmain from './components/Panelmain';
 import Panelparking from './components/Panelparking';
 import Error from '@/views/Error404';
+import UserDetail from '@/views/UserDetail';
 import Home from '@/views/Home';
 import Tickets from './components/Tickets';
 Vue.use(Router);
@@ -22,13 +23,18 @@ export default new Router({
             component: Error
         },
         {
-            path: '/home',
-            name: 'home',
+            path: '/home1',
+            name: 'home1',
             component: Home
         },
         {
-            path: '/Panelmain',
-            name: 'PanelInicio',
+            path: '/user/:id',
+            name: 'user',
+            component: UserDetail
+        },
+        {
+            path: '/home',
+            name: 'home',
             component: Panelmain
         },
         {
