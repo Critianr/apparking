@@ -5,6 +5,12 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import router from '@/router';
 
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+Vue.use(VueAxios, axios);
+
+axios.defaults.baseURL = 'http://localhost:3000/api';
+
 Vue.config.productionTip = false
 Vue.use(BootstrapVue);
 

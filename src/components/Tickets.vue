@@ -4,63 +4,158 @@
 <!-- <div class="col"> -->
     <div class="container">
         <h1>Gestion tickets</h1>
-<div class="input-group mb-3">
-  <span class="input-group-text" id="inputGroup-sizing-default">Buscar Placa </span>
-  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-</div>
-<label class="btn btn-primary" for="btn-check-2">Buscar</label>
+      <div class="field has-addons is-pulled-right">
+      <div class="control"> 
+<!-- @keyup="searchData" -->
+      <input type="text" v-model="search" class="input is rounded" @keyup="searchData" />
+       <button class="success" @click="searchData"> Buscar </button>      
+      
+      </div>
+      <div class="control"> 
+<!-- <table class="table">
+               <thead>
+                   <tr>
+                       <th scope="col">Placa</th>
+                        <th scope="col">puesto</th>
+                       <th scope="col">vehiculo</th>
+                       <th scope="col">tiempo</th>
+                       <th scope="col">Pagar</th>
+                       <th scope="col">Acciones</th>
+                   </tr>
+               </thead>
+               <tbody>
+                   <tr  v-for="(plac, placa) in tickets" :key="placa">
+                       <th scope="row">{{placa.placa}}</th>
+                       <td >{{placa.tiempoInicio}} </td>
+                       <td>{{placa.Puesto}}</td>
+                       <td>{{placa.TipoVehiculo}}</td>
+                       <td>{{ ticketeditar.tFinal}}</td>
+                       <td>{{ placa.diferen}}</td>
+                       <td><button type="button" @submit="finTickt(item._id)" class="btn btn-warning">Editar</button></td>
+                       
+
+                   </tr>
+               </tbody>
+            </table>     -->
+                 </div> 
+      </div>
         <div class="item-resul">
+     <table class="table">
+               <thead>
+                   <tr>
+                       <th scope="col">Placa</th>
+                       <th scope="col">tiempo</th>
+                       <th scope="col">puesto</th>
+                       <th scope="col">vehiculo</th>
+                       <th scope="col">tiempo</th>
+                       <th scope="col">Pagar</th>
+                       <th scope="col">Acciones</th>
+                   </tr>
+               </thead>
+               <tbody>
+                   <tr  v-for="(item, index) in ticket" :key="index">
+                       <th scope="row">{{item.placa}}</th>
+                       <td >{{item.tiempoInicio}} </td>
+                       <td>{{item.Puesto}}</td>
+                       <td>{{item.TipoVehiculo}}</td>
+                       <td>{{ ticketeditar.tiempoFinal}}</td>
+                       <td>{{ item.diferen}}</td>
+                       <td><button type="button" @click="finTickt" class="btn btn-warning">Editar</button></td>
+                       
 
-                <h4>Ticket</h4>
-                <!-- <p> -->
-            <div class="container ticket" v-bind:key="user.login.uuid">
-            <!-- <div class="card-img-top" :src="user.picture.large"> -->
-
-            <!-- <a :href="'/user/'+user.login.uuid"> 
-            <img :src="user.picture.medium" alt=""> </a> -->
-            <p>nombre y apellido :{{user.name.first}} {{user.name.last}}</p>
-            <p>Ciudad: {{user.location.city}}</p>
-            <p>email: {{user.email}}</p>
-            <p>username: {{user.login.username}}</p>
-            <b-button class="btn-danger" variant="danger">Finalizar Ticket</b-button>
-            </div>
-
-            
-            </div>
+                   </tr>
+               </tbody>
+            </table>   
+        </div>
         </div>
         </div>
 </template>
 <script>
-import api from '@/api';
+// import api from '@/api';
 import Dashboar from './Dashboar.vue'
+// import ViewTicket from './ViewTicket.vue';
 // import Users from '@/components/Users.vue';
+
 export default {
 //   name: 'App',
   data(){
       return{
-        user: {},//mostrar una informacin de ese objeto de dato
-        loaded: false
+          ticketeditar: { tiempoFinal :Date.now()},
+          editar: false,
+          tickets: [],
+          search: '',
+          setTimeoutBuscador:'',
+          ticket: {},
+        //   tFinal:Date.now()
+
       }
   },
   components: {
-      Dashboar
+      Dashboar,
   },
-    created(){
-        // api.getUsersPromise().then(data => this.users = console.log(data));
-        // api.getUsersPromise().then(data => this.users = data);
-        // (async()=>{this.users = await api.getUserAsync()})();
-        this.getUser(this.$route.query.id);//devuelve el usuario desde el id por medi de la url
+  created(){
+// this.mostralist();
+// this.finTickt();  
+this.getId();
+  },
+  methods:{
+    getId(id){
+        (async ()=>  {
+            this.ticket = await this.axios.get('/tickets/:id' , id)
+            console.log(this.ticket)
+        })
     },
-    methods:{
-            getUser(id){
-           (async ()=>{
-               this.user = await api.getUserData(id);
-            //    this.loaded = true;
-               console.log(this.user);
-           })();
-       }
-    }
+//   mostralist(){
+//       this.axios.get('/tickets')
+//         .then(res => {
+//         console.log(res.data)
+//         this.tickets = res.data
+//           })
+//         .catch(e => {
+//         console.log(e.response);
+//         })
+//   },
+    searchData(){
+          this.axios.get('/tickets/placa/' + this.search)
+        .then(res => {
+        this.ticket = res.data;
+        console.log(this.ticket)
+        
+          })
+        .catch(e => {
+        console.log(e.res);
+        })
 
+  },
+  finTickt(){
+      this.axios.put('/tickets/placa/' + this.search , this.ticketeditar)
+      .then(res => {
+          this.ticketeditar = res.data.tiempoFinal
+          console.log(res)
+        //   const index = this.ticket.fiendIndex(n => n._id === res.data.placa);
+        //   this.ticket[index].tiempoFinal = res.data.tiempoFinal;
+      })
+      .catch(e=>{
+    console.log(e);
+      })
+  },
+  
+//   searchData(){
+//       clearTimeout(this.setTimeoutBuscador)
+//       this.setTimeoutBuscador = setTimeout(this.mostralist, 360)
+//   },
+//   finTickt(item){
+//       this.axios.put('tickets/placa/:placa'+ this.search , this.ticketeditar )
+//       .then(res =>{
+//         let index = this.tickets.findIndex(n => n.placa === this.ticketeditar.placa);
+//         this.tickets[index].tiempoFinal = this.ticketeditar.tiempoFinal;
+//           console.log(res);
+//       })
+//       .catch(e=>{
+//     console.log(e);
+//       })
+//   },
+   }
 }
 </script>
 
