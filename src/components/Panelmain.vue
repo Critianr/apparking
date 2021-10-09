@@ -5,7 +5,19 @@
     <!-- inputs -->
 <!-- <div class="col-md-4 panel"> -->
         <!-- <h1>Panel de usuario</h1>  @submit="addTicke" -->
-    <form  @submit="addTicke()" class="container gestion mx-5 ">
+
+
+
+    <form  @submit.prevent="addTicke()" class="container gestion mx-5 ">
+       <b-alert
+ :show="dismissCountDown"
+ dismissible
+ :variant="mensaje.color"
+ @dismissed="dismissCountDown=0"
+ @dismiss-count-down="countDownChanged"
+>
+ {{mensaje.texto}}
+</b-alert>
       <h2 class="my-1">Ingrese informacion correpondiente</h2>
     <div class="input-group mb-3">
   <span class="input-group-text" id="inputGroup-sizing-default">Ingrese placa</span>
@@ -32,7 +44,7 @@
 
   </div>
   <div class="input-group mb-3">
-  <span class="input-group-text" id="inputGroup-sizing-default" >{{ticketDato.tiempoI}}</span>
+  <!-- <span class="input-group-text" id="inputGroup-sizing-default" >{{ticketDato.tiempoI}}</span> -->
   <!-- <input v-model="ticketDato.tInicio" /> -->
 </div>
   <button type="submit" class="btn btn-success" >Ingresar</button>
@@ -42,27 +54,19 @@
 </template>
 <script>
 import Dashboar from './Dashboar.vue';
+// import moment from 'moment';
 // import axios from 'axios';
 
-// import pruebas from '../task/pruebas.json';
 export default {
 //   name: 'App',
   data(){
     return{
       datotickets: [],
-
-      // placa: '',
-      // puesto: '',
-      // tipoVehiculo: '',
-      // // tInicio: ''
-      // tInicio: Date.now()
+      mensaje: {color: 'success', texto: ''},
+      dismissSecs: 5,
+      dismissCountDown: 0,
       
-      ticketDato: {placa:'', tipoVehiculo: '', Puesto: '', tiempoI: Date.now() },
-      
-      // ticketDato: null      // placa:'',
-      // TipoVehiculo: '',
-      // Puesto: '',
-      // tiempoInicio: Date
+      ticketDato: {placa:'', tipoVehiculo: '', Puesto: '', tiempoI: Date.now(), valorP: 0},
     }
   },
   created(){
@@ -74,17 +78,19 @@ export default {
             .then(res => {
               this.datotickets.push(res.data)
             this.ticketDato.placa='';
-             this.ticketDato.puesto='';
-             this.ticketDato.tipoVehiculo=''
+             this.ticketDato.Puesto='';
+             this.ticketDato.tipoVehiculo='';
+             this.mensaje.color='success',
+             this.mensaje.texto='Ticket agregado',
+             this.showAlert()
              })
             .catch(e => {
                console.log(e.res);
             })
-            //  this.mensaje.color='success',
-            // this.mensaje.texto='Agredado';
-            // this.showAlert();
-          //  })
         },
+        countDownChanged(dismissCountDown) { this.dismissCountDown = dismissCountDown
+         },
+        showAlert() { this.dismissCountDown = this.dismissSecs }
       },
   components: {
       Dashboar 
