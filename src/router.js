@@ -7,7 +7,6 @@ import Error from '@/views/Error404';
 import UserDetail from '@/views/UserDetail';
 import Home from '@/views/Home';
 import Tickets from './components/Tickets';
-import Login2 from './components/Login2';
 Vue.use(Router);
 
 export default new Router({
@@ -18,11 +17,6 @@ export default new Router({
             name: 'Login',
             component: Login
         }, // cualquier ruta que no e reconoca el * es el que va actuar
-        {
-        path: '/login',
-            name: 'Login2',
-            component: Login2
-        },
         {
             path: '*',
             name: 'error',

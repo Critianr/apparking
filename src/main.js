@@ -4,13 +4,13 @@ import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import router from '@/router';
-import moment from 'moment';
+
 import axios from 'axios';
-Vue.use(moment)
+
 import VueAxios from 'vue-axios';
 Vue.use(VueAxios, axios);
 
-axios.defaults.baseURL = 'http://localhost:3000/api';
+axios.defaults.baseURL = 'https://app58.herokuapp.com/api';
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue);
